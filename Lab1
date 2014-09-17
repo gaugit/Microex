@@ -3,6 +3,7 @@
  * Author: Microex
  *
  * Created on 12 September, 2014, 2:46 PM
+ * Updated on 17 September, 2014, 17:30 PM
  */
 
 #define Light_thres 300
@@ -33,16 +34,15 @@ int Readadc(void)
     adcval = ((ADRESH << 8) | ADRESL) ;
     return adcval;
 }
-
 void main(void)
 {
- int adc_read = 0;
- TRISA = 0b00000100; // PORTA PIN2 set as input
- TRISC = 0b00000000; // PORTC All Outputs
+ unsigned int adc_read = 0;
+ 
+ TRISC = 0b01000000; // PORTC RC3 set as
 
- ANSEL = 0b00000100; //set pin RA2 as analog
+ ANSEL = 0b10000000; //set pin RA2 as analog
  ADCON1 = 0b0101000;  //clock conversion FOSC/16
- ADCON0 = 0b00001001; // ADC enable
+ ADCON0 = 0b10011101; // ADC enable / Right justified / AD7 channel
 
  while(1)
  {
@@ -51,15 +51,13 @@ void main(void)
   if(adc_read > Light_thres)
      PORTCbits.RC0 = 1; //RC0 is high level
   else
-      PORTCbits.RC0 = 0; //RC0 is low level
-      
-      
+     PORTCbits.RC0 = 0; //RC0 is low level
   /*
   PORTCbits.RC0 = 1; //RC0 is high level
   delay(1);
   PORTCbits.RC0 = 0; //RC0 is low level
   delay(1);
-  */
+   */
  }
 
 }
