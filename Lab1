@@ -38,6 +38,8 @@ void main(void)
 {
  unsigned int adc_read = 0;
  
+ OSCCON = 0b01110001;  //8MHZ clock using internal oscillator
+ 
  TRISC = 0b01000000; // PORTC RC3 set as
 
  ANSEL = 0b10000000; //set pin RA2 as analog
