@@ -6,14 +6,12 @@
  * Updated on 17 September, 2014, 17:30 PM
  */
 
-#define Light_thres 300
+#define Light_thres 700
 //#include <xc.h>                                    //PIC hardware mapping
 #include <pic16f688.h>
-//#define _XTAL_FREQ 500000                           //Used by the XC8 delay_ms(x) macro
 
 //config bits that are part-specific for the PIC16F1829
 #pragma config /*FOSC=INTOSC,*/ WDTE=OFF, MCLRE=OFF
-//#pragma config WRT=OFF, PLLEN=OFF, STVREN=OFF, LVP=OFF
 
 /*
  * 
@@ -37,28 +35,28 @@ int Readadc(void)
 void main(void)
 {
  unsigned int adc_read = 0;
- 
+
  OSCCON = 0b01110001;  //8MHZ clock using internal oscillator
- 
- TRISC = 0b01000000; // PORTC RC3 set as
+ TRISC = 0b00001000; // PORTC RC3 set as
 
  ANSEL = 0b10000000; //set pin RA2 as analog
  ADCON1 = 0b0101000;  //clock conversion FOSC/16
  ADCON0 = 0b10011101; // ADC enable / Right justified / AD7 channel
-
+ PORTCbits.RC2 = 1;
  while(1)
  {
-
+  delay(10);
   adc_read = Readadc();    //read ldr value
-  if(adc_read > Light_thres)
-     PORTCbits.RC0 = 1; //RC0 is high level
+  if(adc_read < Light_thres)
+     PORTCbits.RC2 = 1; //RC2 is high level  //LED OFF
   else
-     PORTCbits.RC0 = 0; //RC0 is low level
+     PORTCbits.RC2 = 0; //RC2 is low level  //LED ON
+ 
   /*
-  PORTCbits.RC0 = 1; //RC0 is high level
-  delay(1);
-  PORTCbits.RC0 = 0; //RC0 is low level
-  delay(1);
+  PORTCbits.RC2 = 1; //RC0 is high level
+  delay(10);
+  PORTCbits.RC2 = 0; //RC0 is low level
+  delay(10);
    */
  }
 
