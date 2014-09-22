@@ -1,6 +1,6 @@
 /* 
- * File:   newmain.c
- * Author: Microex
+ * File:   Lab1.c
+ * Author: Gaurav Pitale
  *
  * Created on 12 September, 2014
  * Updated on 17 September, 2014
