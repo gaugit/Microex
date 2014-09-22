@@ -1,3 +1,3 @@
 Microex
 =======
-This is the temperory code for LAB 1.
+MPLAB X Code for LAB 1.
