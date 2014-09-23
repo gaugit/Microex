@@ -1,3 +1,3 @@
 Microex
 =======
-MPLAB X Code for LAB 1.
+Code for LAB 1.
