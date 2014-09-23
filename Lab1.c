@@ -3,7 +3,6 @@
  * Author: Gaurav Pitale
  *
  * Created on 12 September, 2014
- * Updated on 17 September, 2014
  */
 
 #define Light_thres 700
@@ -25,6 +24,8 @@ void delay(unsigned dly)
  for(temp=1000;temp>0;temp--);
 }
 
+/*Function to read ADC value*/
+
 int Readadc(void)
 {
     int adcval = 0;
@@ -39,21 +40,25 @@ void main(void)
 {
  unsigned int adc_read = 0;
 
- OSCCON = 0b01110001;              //8MHZ clock using internal oscillator
+ OSCCON = 0b01110001;             //8MHZ clock using internal oscillator
  TRISC = 0b00001000;              // PORTC RC3 set as input for ADC and RC2 set as output for LED
 
  ANSEL = 0b10000000;              //set pin RA7 as analog
- ADCON1 = 0b0101000;              //clock conversion FOSC/16
- ADCON0 = 0b10011101;             // ADC enable / Right justified / AD7 channel selected
+ ADCON1 = 0b01010000;             //clock conversion FOSC/16
+ ADCON0 = 0b10011101;             // Right justified / Vcfg= Vdd / AD7 channel selected / ADC enable  
+ 
  LED_OFF;
+ 
  while(1)
  {
   delay(10);
+  
   adc_read = Readadc();             //Read LDR value
-  if(adc_read < Light_thres)       //Checking LDR value
-     LED_OFF;                     //RC2 is high level  //LED OFF
+  
+  if(adc_read < Light_thres)        //Checking LDR value
+     LED_OFF;                       //RC2 is high level  //LED OFF
   else
-     LED_ON;                      //RC2 is low level  //LED ON
+     LED_ON;                        //RC2 is low level  //LED ON
  }
 
 }
