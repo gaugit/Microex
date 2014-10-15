@@ -56,17 +56,12 @@ unsigned char value=0;
 
 
 SYS_INIT();
-PORTAbits.RA4 = 1;
+
 while(1){
 
     adc_read = Readadc();
 
-    //  if(adc_read > 700)
-    //    PORTAbits.RA4 = 0;
-    // else
-    //   PORTAbits.RA4 = 1;
-
-    slave_state_machine();
+   slave_state_machine();
 }
    return (EXIT_SUCCESS);
 }
@@ -135,7 +130,7 @@ void SYS_INIT(void)
 unsigned int adc_read = 0;
 
 OSCCON = 0b01110001; //8MHZ clock using internal oscillator
-TRISA  = 0b00000100; // PORTA RA3 set as input for ADC
+TRISA  = 0b00000100; // PORTA RA2 set as input for ADC
 ANSEL  = 0b00000100; //set pin RA2 as analog for adc and AN4-7 (RC0-3) as digital for Galileo
 ADCON1 = 0b0101000; //clock conversion FOSC/16
 ADCON0 = 0b10001001; // ADC enable / Right justified / AN2 channel selected
