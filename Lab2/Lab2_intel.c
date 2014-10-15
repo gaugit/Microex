@@ -127,8 +127,8 @@ static int GPIOWrite(int pin, int value)
 	return(0);
 }
 
-#define STB        26
-#define GP0        28
+#define STB            26
+#define GP0            28
 #define GP1	       17
 #define GP2	       24
 #define GP3	       27
@@ -138,6 +138,7 @@ static int GPIOWrite(int pin, int value)
 #define MSG_RESET 0x0 /* reset the sensor to initial state */
 #define MSG_PING  0x1 /* check if the sensor is working properly */
 #define MSG_GET   0x2 /* obtain the most recent ADC result */
+
 /* Sensor Device Responses */
 #define MSG_ACK 0xE   /* acknowledgement to the commands */
 #define MSG_NOTHING 0xF /* reserved */
@@ -148,13 +149,13 @@ int write_cmd(unsigned char cmd)
     int gpio_arr[4] = {GP0,GP1,GP2,GP3};
 
     if (-1 == GPIOWrite(STB, HIGH))          //Make strobe pin high
-			return(3);
+	return(3);
 
-	if (-1 == GPIODirection(GP0, OUT) || -1 == GPIODirection(GP1, OUT) || -1 == GPIODirection(GP2, OUT) || -1 == GPIODirection(GP3, OUT))
-		return(2);
+    if (-1 == GPIODirection(GP0, OUT) || -1 == GPIODirection(GP1, OUT) || -1 == GPIODirection(GP2, OUT) || -1 == GPIODirection(GP3, OUT))
+	return(2);
 
 	temp = cmd;
-		for(i=0;i<4;i++)
+	for(i=0;i<4;i++)
         {
             if((temp & 0x01) == 1)
             {
@@ -178,15 +179,15 @@ int read_data(void)
 {
     unsigned char data=0;
     if (-1 == GPIOWrite(STB, HIGH))          //Make strobe pin high
-			return(1);
+	return(1);
 
-	if (-1 == GPIODirection(GP0, IN) || -1 == GPIODirection(GP1, IN) || -1 == GPIODirection(GP2, IN) || -1 == GPIODirection(GP3, IN))
-		return(2);
+    if (-1 == GPIODirection(GP0, IN) || -1 == GPIODirection(GP1, IN) || -1 == GPIODirection(GP2, IN) || -1 == GPIODirection(GP3, IN))
+	return(2);
 
     data = (GPIORead(GP0) | (GPIORead(GP1) << 1) | (GPIORead(GP2) << 2) | (GPIORead(GP3) << 3));
 
     if (-1 == GPIOWrite(STB, LOW))          //Make strobe pin low
-			return(3);
+	return(3);
 
     return data;
 }
@@ -196,54 +197,58 @@ int main(int argc, char *argv[])
     int adc_data=0,sw_ch=0;
     unsigned char in_ch=0,get_nib=0;
     if (-1 == GPIOExport(STB) || -1 == GPIOExport(GP0) || -1 == GPIOExport(GP1) || -1 == GPIOExport(GP2) || -1 == GPIOExport(GP3))
-		return(1);
+	return(1);
 
 	/*
 	 * Set GPIO directions
 	 */
-	if (-1 == GPIODirection(STB, OUT))
-		return(2);
+    if (-1 == GPIODirection(STB, OUT))
+	return(2);
+	
     GPIOWrite(STB, LOW);
 
-	while(1)
-	{
+    while(1)
+    {
 		printf("Enter the choice\n1:Send Ping\n2:Send Reset\n3:Get data\n4:Exit\n");
 		scanf("%d",&sw_ch);
 		switch(sw_ch)
 		{
 		case 1:
 			if(write_cmd(MSG_PING) != 0)
-		    printf("Write command failed\n");
+		           printf("Write command failed\n");
 			get_nib = read_data();
                         if(get_nib == 0xE)
-				printf("ACK received\n");
+			   printf("ACK received\n");
 			else
-				printf("Ping command failed\n");
+			   printf("Ping command failed\n");
 			break;
 		case 2:
 			if(write_cmd(MSG_RESET) != 0)
-		    printf("Write command failed\n");
+		           printf("Write command failed\n");
 			get_nib = read_data();
+			
 			if(get_nib == 0xE)
-				printf("ACK received\n");
+			   printf("ACK received\n");
 			else
-				printf("Reset command failed\n");
+			   printf("Reset command failed\n");
 			break;
 		case 3:
 			if(write_cmd(MSG_GET) != 0)
-		    printf("Write command failed\n");
-		    adc_data = (read_data() | (read_data() << 4) | (read_data() << 8));
-                    printf("LDR value = %d\n",adc_data);
+		           printf("Write command failed\n");
+		           
+		        adc_data = (read_data() | (read_data() << 4) | (read_data() << 8));
+                        printf("LDR value = %d\n",adc_data);
 			break;
 		case 4:
-                     in_ch = 1;
-                     break;
+                        in_ch = 1;
+                        break;
                 }
-          if(in_ch == 1)
-            {
-             in_ch=0; break;
-            }
+                if(in_ch == 1)
+                {
+                 in_ch=0; break;
+                }
 	}
+	
     if (-1 == GPIOUnexport(STB) || -1 == GPIOUnexport(GP0) || -1 == GPIOUnexport(GP1) || -1 == GPIOUnexport(GP2) || -1 == GPIOUnexport(GP3))
         return(4);
 }
