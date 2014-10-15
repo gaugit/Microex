@@ -183,9 +183,9 @@ int read_data(void)
 
     if (-1 == GPIODirection(GP0, IN) || -1 == GPIODirection(GP1, IN) || -1 == GPIODirection(GP2, IN) || -1 == GPIODirection(GP3, IN))
 	return(2);
-
+    usleep(10000);
     data = (GPIORead(GP0) | (GPIORead(GP1) << 1) | (GPIORead(GP2) << 2) | (GPIORead(GP3) << 3));
-
+    
     if (-1 == GPIOWrite(STB, LOW))          //Make strobe pin low
 	return(3);
 
