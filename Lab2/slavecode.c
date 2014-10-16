@@ -75,7 +75,6 @@ void slave_state_machine(void)
  {
      case POLL_STROBE :
             TRISC  = PORTC_IN;
-           // master_cmd = 0;
             if(STROBE == RESET )
             {
               slave_state = POLL_STROBE ;
@@ -100,8 +99,6 @@ void slave_state_machine(void)
             }
             else
             {
-             
-            //  master_cmd = 0 ;
               master_cmd = (unsigned char)PORTC ;
               master_cmd = master_cmd & 0x0f;
               slave_state = READ_CMD ;
@@ -178,14 +175,6 @@ unsigned char slave_response(unsigned char command)
                          ReadOrProcess = 1  ;
                         }
 
-/*
-                        time_out++;
-                        if(time_out > 5000)
-                        {
-                          state = POLL_STROBE ;
-                          time_out = 0 ;
-                        }
-*/
                        break ;
 
 
