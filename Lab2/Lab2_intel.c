@@ -217,20 +217,24 @@ int main(int argc, char *argv[])
 			if(write_cmd(MSG_PING) != 0)
 		           printf("Write command failed\n");
 			get_nib = read_data();
-                        if(get_nib == 0xE)
+                        if(get_nib == MSG_ACK)
 			   printf("ACK received\n");
 			else
 			   printf("Ping command failed\n");
+			   
+			get_nib = 0;   
 			break;
 		case 2:
 			if(write_cmd(MSG_RESET) != 0)
 		           printf("Write command failed\n");
 			get_nib = read_data();
 			
-			if(get_nib == 0xE)
+			if(get_nib == MSG_ACK)
 			   printf("ACK received\n");
 			else
 			   printf("Reset command failed\n");
+			
+			get_nib = 0;   
 			break;
 		case 3:
 			if(write_cmd(MSG_GET) != 0)
