@@ -1,7 +1,8 @@
+#include "pic_read.h"
 #include "gpio.h"
 
-#define STB            26
-#define GP0            28
+#define STB                26
+#define GP0                28
 #define GP1	           17
 #define GP2	           24
 #define GP3	           27
