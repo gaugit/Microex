@@ -4,6 +4,7 @@
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
 #include "gpio.h"
+#inculde "rtc.h"
 
 unsigned char conv_dec(unsigned char hexnumber)
 {
