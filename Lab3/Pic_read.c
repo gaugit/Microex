@@ -1,4 +1,3 @@
-
 #include "gpio.h"
 
 #define STB            26
